@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDU-TECH Obour Team</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{ --navy:#0b3d6e; --navy-light:#14508d; --green:#1fa463; --bg:#f1f5f9; --card:#ffffff; --text:#0f172a; --shadow:rgba(0,0,0,.08); }
+body.dark{ --bg:#0f172a; --card:#1e293b; --text:#ffffff; --shadow:rgba(0,0,0,.4); }
+*{ margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif; }
+body{ background:var(--bg); color:var(--text); overflow-x:hidden; transition:.4s; }
+body::before{ content:""; position:fixed; inset:0; background-image: radial-gradient(rgba(31,164,99,.08) 1px,transparent 1px); background-size:30px 30px; z-index:-1; }
+
+/* LOADER */
+.loader{ position:fixed; inset:0; background:linear-gradient(135deg,#ffffff,#14508d); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; color:white; transition:1s; }
+.loader.hide{ opacity:0; visibility:hidden; }
+.loader-logo{ width:130px; height:130px; border-radius:50%; overflow:hidden; border:5px solid #1fa463; animation:glow 1.5s infinite alternate; background:white; }
+.loader-logo img{ width:100%; height:100%; object-fit:cover; }
+@keyframes glow{ from{ box-shadow:0 0 10px #1fa463; transform:scale(1); } to{ box-shadow:0 0 40px #1fa463; transform:scale(1.05); } }
+
+/* HEADER */
+.header{ padding:40px 20px; text-align:center; position:relative; }
+.controls{ position:absolute; top:20px; left:20px; display:flex; gap:10px; }
+.controls button{ width:45px; height:45px; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(135deg,var(--navy),var(--navy-light)); color:white; font-size:1rem; transition:.3s; }
+.controls button:hover{ transform:translateY(-3px); }
+.controls button.admin-active { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 0 10px rgba(220, 38, 38, 0.5); }
+.logo-box{ width:170px; height:170px; margin:auto; border-radius:50%; overflow:hidden; border:5px solid var(--green); background:white; box-shadow:0 10px 35px rgba(11,61,110,.2); }
+.logo-box img{ width:100%; height:100%; object-fit:cover; }
+.header h1{ margin-top:20px; font-size:2.6rem; color:var(--navy); }
+body.dark .header h1{ color:white; }
+.header h1 span{ color:var(--green); }
+.subtitle{ margin-top:10px; color: var(--text); font-weight:600; }
+
+/* ADMINS */
+.admin-section{ max-width:1200px; margin:auto; display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; }
+.admin-card{ width:260px; background:linear-gradient(135deg,var(--navy),var(--navy-light)); color:white; border-radius:22px; padding:25px 20px; text-align:center; transition:.4s; overflow:hidden; position:relative; }
+.admin-card:hover{ transform:translateY(-8px); }
+.admin-card img{ width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid var(--green); margin-bottom:12px; background:white; }
+.admin-card p{ color:#86efac; font-weight:bold; margin-top:8px; }
+
+/* MAIN */
+.container{ max-width:1250px; margin:auto; padding:30px 20px 80px; }
+.section-title{ display:flex; align-items:center; gap:15px; margin-bottom:35px; }
+.section-title h2{ font-size:1.5rem; }
+.line{ flex:1; height:2px; background:linear-gradient(to left,var(--green),transparent); }
+html[dir="ltr"] .line{ background:linear-gradient(to right,var(--green),transparent); }
+.team-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
+
+/* CARDS */
+.dept-card{ width:280px; background:var(--card); border-radius:25px; padding:35px 25px; text-align:center; cursor:pointer; transition:.4s; position:relative; overflow:hidden; box-shadow:0 10px 25px var(--shadow); }
+.dept-card:hover{ transform:translateY(-10px); }
+.dept-icon{ width:90px; height:90px; margin:auto auto 18px; background:rgba(31,164,99,.12); border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:2.3rem; color:var(--green); transition:.3s; }
+.dept-card:hover .dept-icon{ background:var(--green); color:white; }
+.members-count{ margin-top:10px; color:#64748b; }
+
+/* SIDEBAR */
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; z-index:1000; }
+.overlay.active{ display:block; }
+.sidebar{ position:fixed; top:0; left:-450px; width:420px; max-width:100%; height:100%; background:var(--card); z-index:1005; padding:30px; overflow-y:auto; transition:.5s; }
+html[dir="ltr"] .sidebar { left: auto; right: -450px; }
+.sidebar.active{ left:0; }
+html[dir="ltr"] .sidebar.active { left: auto; right: 0; }
+.sidebar-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; }
+.close-btn{ font-size:2rem; cursor:pointer; }
+.leader-box{ background:linear-gradient(135deg,var(--navy),var(--navy-light)); color:white; border-radius:25px; padding:30px 20px; text-align:center; margin-bottom:30px; }
+.leader-box img{ width:120px; height:120px; border-radius:50%; border:4px solid var(--green); object-fit:cover; margin-bottom:15px; background:white; }
+.member-item{ display:flex; align-items:center; gap:15px; padding:14px; border-radius:18px; background:var(--bg); margin-bottom:12px; border-right:4px solid var(--green); text-align: start; position: relative; }
+html[dir="ltr"] .member-item { border-right: none; border-left: 4px solid var(--green); }
+.member-img{ width:58px; height:58px; border-radius:50%; object-fit:cover; }
+
+/* ADMIN CONTROLS */
+.delete-btn { position: absolute; left: 15px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: none; }
+html[dir="ltr"] .delete-btn { left: auto; right: 15px; }
+.admin-mode .delete-btn { display: flex; justify-content: center; align-items: center; }
+.add-member-form { display: none; background: var(--bg); padding: 15px; border-radius: 18px; margin-top: 20px; border: 2px dashed var(--green); }
+.admin-mode .add-member-form { display: block; }
+.add-member-form input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; background: var(--card); color: var(--text); }
+.add-member-form button { width: 100%; padding: 10px; background: var(--green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+footer{ background:linear-gradient(135deg,var(--navy),#082949); color:white; text-align:center; padding:45px 20px; }
+.designer{ color:#86efac; display:block; margin:10px 0; font-size:1.2rem; font-weight:bold; }
+@media(max-width:768px){ .controls{ position:static; justify-content:center; margin-bottom:25px; } .sidebar, html[dir="ltr"] .sidebar{ width:100%; left:-100%; right: auto; z-index: 1005; } .sidebar.active, html[dir="ltr"] .sidebar.active{ left:0; right: auto; } }
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+    <div class="loader-logo">
+        <img src="image.png" onerror="this.src='https://via.placeholder.com/130'">
+    </div>
+    <h2 style="margin-top:25px;">EDU-TECH Obour Team</h2>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<header class="header">
+    <div class="controls">
+        <button onclick="toggleDarkMode()" title="الوضع الليلي"><i class="fas fa-moon"></i></button>
+        <button onclick="toggleLanguage()" title="تغيير اللغة"><i class="fas fa-language"></i></button>
+   
+    </div>
+    <div class="logo-box">
+        <img src="image.png" onerror="this.src='https://via.placeholder.com/170'">
+    </div>
+    <h1 id="title">EDU-TECH <span>فريق العبور</span></h1>
+    <p class="subtitle" id="subtitle">فريق تكنولوجيا المستقبل</p>
+</header>
+
+<section class="admin-section">
+    
+    <div class="admin-card">
+        <img src="القايد.png" onerror="this.src='https://via.placeholder.com/90'">
+        <h3 id="admin2-name">Youssef Marzouk</h3>
+        <p class="admin-role" id="admin2-role">قائد فريق العبور</p>
+    </div>
+    <div class="admin-card">
+        <img src="عمس.png" onerror="this.src='https://via.placeholder.com/90'">
+        <h3 id="admin3-name">Hams Ahmed</h3>
+        <p class="admin-role" id="admin3-role">المدير الإداري</p>
+    </div>
+    <div class="admin-card">
+        <img src="سلوم.png" onerror="this.src='https://via.placeholder.com/90'">
+        <h3 id="admin4-name">Salma Ibrahim</h3>
+        <p class="admin-role" id="admin4-role">المدير التنفيذي</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="section-title">
+        <h2 id="sectionName">الأقسام</h2>
+        <div class="line"></div>
+    </div>
+    <div class="team-grid" id="departments-container"></div>
+</div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2 id="sidebar-title">Department</h2>
+        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+    </div>
+    <div id="leader-content"></div>
+    <div id="members-list"></div>
+    <div class="add-member-form">
+        <h3 style="margin-bottom: 10px; color: var(--navy);">إضافة عضو جديد</h3>
+        <input type="text" id="newMemberNameAr" placeholder="الاسم (عربي)">
+        <input type="text" id="newMemberNameEn" placeholder="الاسم (انجليزي)">
+        <input type="text" id="newMemberRoleAr" placeholder="الدور (عربي) - مثل: عضو">
+        <input type="text" id="newMemberRoleEn" placeholder="الدور (انجليزي) - مثل: Member">
+        <input type="text" id="newMemberImg" placeholder="اسم الصورة - مثل: image.png (اختياري)">
+        <button onclick="addMember()">إضافة</button>
+    </div>
+</aside>
+
+<footer>
+    
+    <p id="footerText">تم التصميم والتطوير بواسطة</p>
+    <span class="designer" id="designerName">Eng. Mohamed</span>
+    <p id="footerJob">Head of Programming Department</p>
+
+    <br>
+    <a href="https://www.facebook.com/share/17VNTPpMvv/" target="_blank" title="تابعنا على فيسبوك">
+    <i class="fab fa-facebook" style="font-size: 2.5rem; color: #1877f2; transition: 0.3s;"></i>
+</a>
+</footer>
+
+<script>
+window.onload=function(){
+    setTimeout(()=>{ document.getElementById("loader").classList.add("hide") },1000);
+}
+
+const originalTeamData = {
+    dept1: {
+        title: { ar: 'إنشاء المشاريع والبرمجيات', en: 'Programming & Projects' }, icon: 'fa-code',
+        leader: { name: { ar: 'محمد أحمد رضوان', en: 'Mohamed Ahmed Radwan' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'الشاشاا العالي الفحل القدوه اللي مفيش منه.png' },
+        members: [
+            { name: { ar: 'همس أحمد', en: 'Hams Ahmed' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمس.png' },
+            { name: { ar: 'زينة محمد', en: 'Zeina Mohamed' }, role: { ar: 'عضو', en: 'Member' }, img: 'زنوبهههه.png' },
+            { name: { ar: 'نادين سعيد', en: 'Nadine Saeed' }, role: { ar: 'عضو', en: 'Member' }, img: 'ندون.png' },
+            { name: { ar: 'تسنيم محمود', en: 'Tasneem Mahmoud' }, role: { ar: 'عضو', en: 'Member' }, img: 'تسنسممم.png' },
+            { name: { ar: 'عمر محمد فوزي', en: 'Omar Mohamed Fawzy' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمر محمد.png' },
+            { name: { ar: 'أحمد خالد', en: 'Ahmed Khaled' }, role: { ar: 'عضو', en: 'Member' }, img: 'احمد.png' },
+            { name: { ar: 'هالة وليد', en: 'Hala Walid' }, role: { ar: 'عضو', en: 'Member' }, img: 'هاله.png' }
+        ]
+    },
+    dept2: {
+        title: { ar: 'التدريب', en: 'Training' }, icon: 'fa-chalkboard-teacher',
+        leader: { name: { ar: 'تسنيم محمود', en: 'Tasneem Mahmoud' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'تسنسممم.png' },
+        members: [
+            { name: { ar: 'همس أحمد', en: 'Hams Ahmed' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمس.png' },
+            { name: { ar: 'محمد أحمد رضوان', en: 'Mohamed Ahmed Radwan' }, role: { ar: 'عضو', en: 'Member' }, img: 'الشاشاا العالي الفحل القدوه اللي مفيش منه.png' },
+            { name: { ar: 'هالة وليد', en: 'Hala Walid' }, role: { ar: 'عضو', en: 'Member' }, img: 'هاله.png' },
+            { name: { ar: 'مصعب رامي', en: 'Mosaab Ramy' }, role: { ar: 'عضو', en: 'Member' }, img: 'mos3b.png' },
+            { name: { ar: 'نادين سعيد', en: 'Nadine Saeed' }, role: { ar: 'عضو', en: 'Member' }, img: 'ندون.png' }
+        ]
+    },
+    dept3: {
+        title: { ar: 'الميديا والتصوير', en: 'Media' }, icon: 'fa-camera',
+        leader: { name: { ar: 'عمر محمد فوزي', en: 'Omar Mohamed Fawzy' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'عمر محمد.png' },
+        members: [
+            { name: { ar: 'زينة محمد', en: 'Zeina Mohamed' }, role: { ar: 'نائب', en: 'Deputy' }, img: 'زنوبهههه.png' },
+            { name: { ar: 'زياد عمرو', en: 'Ziad Amr' }, role: { ar: 'عضو', en: 'Member' }, img: 'زيزو.png' },
+            { name: { ar: 'مهند صابر', en: 'Mohannad Saber' }, role: { ar: 'عضو', en: 'Member' }, img: 'مهند.png' },
+            { name: { ar: 'مصعب رامي', en: 'Mosaab Ramy' }, role: { ar: 'عضو', en: 'Member' }, img: 'mos3b.png' }
+        ]
+    },
+    dept4: {
+        title: { ar: 'الأرشيف والبيانات', en: 'Archive' }, icon: 'fa-database',
+        leader: { name: { ar: 'رقية طارق', en: 'Rokaya Tarek' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'رقيه.png' },
+        members: [
+            { name: { ar: 'ندى أمير', en: 'Nada Amir' }, role: { ar: 'عضو', en: 'Member' }, img: 'ندااا.png' },
+            { name: { ar: 'عمر محمد عبدالمنعم', en: 'Omar Mohamed Abdelmonem' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمر عبد.png' },
+            { name: { ar: 'حنين أحمد', en: 'Haneen Ahmed' }, role: { ar: 'عضو', en: 'Member' }, img: 'حنينن.png' }
+        ]
+    },
+    dept5: {
+        title: { ar: 'الدعم والتواصل', en: 'Support' }, icon: 'fa-headset',
+        leader: { name: { ar: 'حنين أحمد', en: 'Haneen Ahmed' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'حنينن.png' },
+        members: [
+            { name: { ar: 'حمزة حسام', en: 'Hamza Hossam' }, role: { ar: 'عضو', en: 'Member' }, img: 'حمزه.png' },
+            { name: { ar: 'مهند صابر', en: 'Mohannad Saber' }, role: { ar: 'عضو', en: 'Member' }, img: 'مهند.png' },
+            { name: { ar: 'أحمد خالد', en: 'Ahmed Khaled' }, role: { ar: 'عضو', en: 'Member' }, img: 'احمد.png' },
+            { name: { ar: 'ندى أمير', en: 'Nada Amir' }, role: { ar: 'عضو', en: 'Member' }, img: 'ندااا.png' }
+        ]
+    },
+    dept6: {
+        title: { ar: 'التقييم والمتابعة', en: 'Evaluation' }, icon: 'fa-chart-line',
+        leader: { name: { ar: 'سلمى إبراهيم', en: 'Salma Ibrahim' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'سلوم.png' },
+        members: [
+            { name: { ar: 'رقية طارق', en: 'Rokaya Tarek' }, role: { ar: 'عضو', en: 'Member' }, img: 'رقيه.png' },
+            { name: { ar: 'حمزة حسام', en: 'Hamza Hossam' }, role: { ar: 'عضو', en: 'Member' }, img: 'حمزه.png' },
+            { name: { ar: 'زياد عمرو', en: 'Ziad Amr' }, role: { ar: 'عضو', en: 'Member' }, img: 'زيزو.png' }
+        ]
+    },
+    dept7: {
+        title: { ar: 'المحتوى التدريبي', en: 'Training Content' }, icon: 'fa-book-open',
+        leader: { name: { ar: 'هالة وليد', en: 'Hala Walid' }, role: { ar: 'رئيس القسم', en: 'Head' }, img: 'هاله.png' },
+        members: [
+            { name: { ar: 'عمر محمد فوزي', en: 'Omar Mohamed Fawzy' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمر محمد.png' },
+            { name: { ar: 'همس أحمد', en: 'Hams Ahmed' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمس.png' },
+            { name: { ar: 'محمد أحمد رضوان', en: 'Mohamed Ahmed Radwan' }, role: { ar: 'عضو', en: 'Member' }, img: 'الشاشاا العالي الفحل القدوه اللي مفيش منه.png' },
+            { name: { ar: 'عمر محمد عبدالمنعم', en: 'Omar Mohamed Abdelmonem' }, role: { ar: 'عضو', en: 'Member' }, img: 'عمر عبد.png' }
+        ]
+    }
+};
+const translations = {
+    ar: {
+        "title": "EDU-TECH <span>فريق العبور</span>",
+        "subtitle": "فريق تكنولوجيا المستقبل",
+
+
+        "admin2-name": "يوسف مرزوق",
+        "admin2-role": "قائد فريق العبور",
+
+        "admin3-name": "همس أحمد",
+        "admin3-role": "المدير التنفيذي",
+
+        "admin4-name": "سلمى إبراهيم",
+        "admin4-role": "المدير الإداري",
+
+        "sectionName": "الأقسام",
+        "sidebar-title": "القسم",
+
+        "footerText": "تم التصميم والتطوير بواسطة",
+        "designerName": "م. محمد",
+        "footerJob": "رئيس قسم البرمجة"
+    },
+
+    en: {
+        "title": "EDU-TECH <span>Obour Team</span>",
+        "subtitle": "Future Technology Team",
+
+        
+
+        "admin2-name": "Youssef Marzouk",
+        "admin2-role": "Obour Team Leader",
+
+        "admin3-name": "Hams Ahmed",
+        "admin3-role": "Executive Director",
+
+        "admin4-name": "Salma Ibrahim",
+        "admin4-role": "Administrative Director",
+
+        "sectionName": "Departments",
+        "sidebar-title": "Department",
+
+        "footerText": "Designed and Developed by",
+        "designerName": "Eng. Mohamed",
+        "footerJob": "Head of Programming Department"
+    }
+};
+
+let teamData = originalTeamData; 
+let current = "ar";
+let activeDept = null;
+let isAdminMode = false;
+
+async function loadDataFromServer() {
+    try {
+        let response = await fetch('get_data.php?v=' + Date.now());
+        let data = await response.json();
+        
+        if(data && Object.keys(data).length > 0 && data.dept1) {
+            teamData = data; 
+        } else {
+            teamData = originalTeamData;
+            saveDataToServer(originalTeamData);
+        }
+        renderDepartments();
+    } catch(error) {
+        console.error("Error loading data from SQL, loading backup.", error);
+        teamData = originalTeamData;
+        renderDepartments();
+    }
+}
+
+// الدالة المعدلة لإرسال البيانات كـ Form POST لتخطي حماية الاستضافة
+function saveDataToServer(dataToSave) {
+    const params = new URLSearchParams();
+    params.append('team_data', JSON.stringify(dataToSave));
+
+    fetch('save_data.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: params
+    })
+    .then(res => res.json())
+    .then(resData => {
+        if(resData.status === "success") {
+            console.log("تم الحفظ في قاعدة البيانات بنجاح!");
+        } else {
+            alert("خطأ من السيرفر أثناء الحفظ: " + resData.message);
+        }
+    })
+    .catch(err => {
+        console.error("فشل الاتصال بالسيرفر:", err);
+        alert("فشل الاتصال بالسيرفر. تأكد أنك تفتح الموقع من الرابط وليس محلياً!");
+    });
+}
+
+function toggleAdminMode() {
+    isAdminMode = !isAdminMode;
+    const btn = document.getElementById('adminToggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    if (isAdminMode) {
+        btn.classList.add('admin-active');
+        sidebar.classList.add('admin-mode');
+        alert(current === 'ar' ? 'تم تفعيل وضع الإدارة. يمكنك الآن إضافة وحذف الأعضاء.' : 'Admin mode enabled.');
+    } else {
+        btn.classList.remove('admin-active');
+        sidebar.classList.remove('admin-mode');
+    }
+    if(activeDept) renderSidebar();
+}
+
+function addMember() {
+    if(!activeDept) return;
+    let nameAr = document.getElementById('newMemberNameAr').value;
+    let nameEn = document.getElementById('newMemberNameEn').value;
+    let roleAr = document.getElementById('newMemberRoleAr').value;
+    let roleEn = document.getElementById('newMemberRoleEn').value;
+    let imgInput = document.getElementById('newMemberImg').value;
+
+    if(!nameAr || !nameEn) return alert("يرجى إدخال اسم العضو باللغتين العربي والإنجليزي لكي يعمل التبديل");
+
+    teamData[activeDept].members.push({
+        name: { ar: nameAr, en: nameEn },
+        role: { ar: roleAr || 'عضو', en: roleEn || 'Member' },
+        img: imgInput || 'https://via.placeholder.com/58'
+    });
+
+    document.getElementById('newMemberNameAr').value = "";
+    document.getElementById('newMemberNameEn').value = "";
+    document.getElementById('newMemberRoleAr').value = "";
+    document.getElementById('newMemberRoleEn').value = "";
+    document.getElementById('newMemberImg').value = "";
+
+    saveDataToServer(teamData);
+    renderSidebar();
+    renderDepartments(); 
+}
+
+function deleteMember(index) {
+    if(!confirm("هل أنت متأكد من حذف هذا العضو نهائياً؟")) return;
+    teamData[activeDept].members.splice(index, 1);
+    saveDataToServer(teamData);
+    renderSidebar();
+    renderDepartments();
+}
+
+function renderDepartments() {
+    const container = document.getElementById('departments-container');
+    container.innerHTML = "";
+    for(let deptId in teamData) {
+        let dept = teamData[deptId];
+        container.innerHTML += `
+        <div class="dept-card" onclick="openSidebar('${deptId}')">
+            <div class="dept-icon"><i class="fas ${dept.icon}"></i></div>
+            <h3>${dept.title[current]}</h3>
+            <div class="members-count">${dept.members.length} ${current === 'ar' ? 'أعضاء' : 'Members'}</div>
+        </div>`;
+    }
+    for (let key in translations[current]) {
+        let el = document.getElementById(key);
+        if (el && key !== "sidebar-title") el.innerHTML = translations[current][key];
+    }
+}
+
+function openSidebar(deptId) {
+    activeDept = deptId;
+    renderSidebar();
+    document.getElementById("sidebar").classList.add("active");
+    document.getElementById("overlay").classList.add("active");
+}
+
+function renderSidebar() {
+    if (!activeDept) return;
+    let dept = teamData[activeDept];
+    document.getElementById("sidebar-title").innerText = dept.title[current];
+    document.getElementById("leader-content").innerHTML = `
+        <div class="leader-box">
+            <img src="${dept.leader.img}" onerror="this.src='https://via.placeholder.com/120'">
+            <h3>${dept.leader.name[current]}</h3>
+            <p>${dept.leader.role[current]}</p>
+        </div>`;
+    
+    let list = document.getElementById("members-list");
+    list.innerHTML = "";
+    dept.members.forEach((member, index) => {
+        list.innerHTML += `
+        <div class="member-item">
+            <button class="delete-btn" onclick="deleteMember(${index})"><i class="fas fa-trash"></i></button>
+            <img src="${member.img}" class="member-img" onerror="this.src='https://via.placeholder.com/58'">
+            <div><h4>${member.name[current]}</h4><p>${member.role[current]}</p></div>
+        </div>`;
+    });
+}
+
+function closeSidebar() {
+    document.getElementById("sidebar").classList.remove("active");
+    document.getElementById("overlay").classList.remove("active");
+    setTimeout(() => { activeDept = null; }, 400);
+}
+
+function toggleDarkMode() { document.body.classList.toggle("dark"); }
+
+function toggleLanguage() {
+    current = current === "ar" ? "en" : "ar";
+    document.documentElement.lang = current;
+    document.documentElement.dir = current === "en" ? "ltr" : "rtl";
+    renderDepartments();
+    if(activeDept) renderSidebar();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadDataFromServer();
+});
+</script>
+</body>
+</html>
